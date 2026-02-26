@@ -378,59 +378,86 @@
                     </p>
                 </div>
 
-                <div class="xl:col-span-7 grid sm:grid-cols-2 gap-6 reveal reveal-delay-2">
-                    <!-- Feature 1 -->
+                <div class="xl:col-span-7 flex flex-col gap-6 reveal reveal-delay-2">
+                    <!-- Vybavení 1 -->
                     <div
-                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4">
-                        <div class="w-14 h-14 rounded-full bg-ananda-powder flex shrink-0 items-center justify-center">
-                            <svg class="w-6 h-6 text-ananda-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
-                                </path>
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                        <div
+                            class="w-16 h-16 rounded-full bg-ananda-powder/50 flex shrink-0 items-center justify-center text-ananda-dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8" fill="none"
+                                stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M 25 68 L 35 80 L 80 75 L 70 63" fill="none" />
+                                <path d="M 25 71 L 35 83 L 80 78" fill="none" />
+                                <path d="M 25 68 L 25 71 M 35 80 L 35 83 M 80 75 L 80 78" fill="none" />
+                                <path d="M 28 30 L 73 25 A 12 20 0 0 1 73 65 L 28 70 Z" fill="white" />
+                                <ellipse cx="28" cy="50" rx="12" ry="20" fill="white" />
+                                <ellipse cx="28" cy="50" rx="7" ry="12" fill="none" />
+                                <ellipse cx="28" cy="50" rx="2.5" ry="4.5" fill="none" />
+                                <path d="M 50 27.5 A 12 20 0 0 1 50 67.5" fill="none" />
+                                <path d="M 60 26.5 A 12 20 0 0 1 60 66.5" fill="none" />
                             </svg>
                         </div>
-                        <div>
-                            <h4 class="font-medium text-ananda-dark mb-1">Prostorný sál</h4>
-                            <p class="text-sm text-ananda-dark/60">Sál pro skupinové lekce</p>
+                        <div class="text-center sm:text-left">
+                            <h4 class="text-xl font-medium text-ananda-dark mb-2">Jógové pomůcky</h4>
+                            <p class="text-sm text-ananda-dark/70 font-light leading-relaxed">K dispozici jsou kvalitní
+                                neklouzavé podložky, bloky, pásky i měkké bolster polštáře pro maximální podporu a
+                                bezpečí při cvičení.</p>
                         </div>
                     </div>
-                    <!-- Feature 2 -->
+                    <!-- Vybavení 2 -->
                     <div
-                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4">
-                        <div class="w-14 h-14 rounded-full bg-ananda-sage/40 flex shrink-0 items-center justify-center">
-                            <svg class="w-6 h-6 text-ananda-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
-                                </path>
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                        <div
+                            class="w-16 h-16 rounded-full bg-ananda-sage/30 flex shrink-0 items-center justify-center text-ananda-dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8" fill="none"
+                                stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M 50 15 L 50 25" />
+                                <path d="M 35 25 L 65 25 Q 70 25 70 30 L 70 35 L 30 35 L 30 30 Q 30 25 35 25 Z" />
+                                <path d="M 40 45 L 35 55" />
+                                <path d="M 50 45 L 50 55" />
+                                <path d="M 60 45 L 65 55" />
+                                <path d="M 30 65 L 25 75" />
+                                <path d="M 50 65 L 50 75" />
+                                <path d="M 70 65 L 75 75" />
                             </svg>
                         </div>
-                        <div>
-                            <h4 class="font-medium text-ananda-dark mb-1">Kvalitní vybavení</h4>
-                            <p class="text-sm text-ananda-dark/60">Podložky a cvičební pomůcky</p>
+                        <div class="text-center sm:text-left">
+                            <h4 class="text-xl font-medium text-ananda-dark mb-2">Sprchy a hygiena</h4>
+                            <p class="text-sm text-ananda-dark/70 font-light leading-relaxed">Před i po dynamičtější
+                                lekci si můžete dopřát uvolňující sprchu. K dispozici je také čistá přírodní kosmetika a
+                                fén.</p>
                         </div>
                     </div>
-                    <!-- Feature 3 -->
+                    <!-- Vybavení 3 -->
                     <div
-                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4 xl:mt-6">
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex flex-col sm:flex-row items-center sm:items-start gap-6">
                         <div
-                            class="w-14 h-14 rounded-full bg-ananda-pink flex shrink-0 items-center justify-center pb-1 text-2xl text-ananda-dark">
-                            ☽
+                            class="w-16 h-16 rounded-full bg-ananda-pink/30 flex shrink-0 items-center justify-center text-ananda-dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8" fill="none"
+                                stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="25" y="20" width="50" height="60" />
+                                <line x1="50" y1="20" x2="50" y2="80" />
+                                <line x1="25" y1="80" x2="25" y2="85" />
+                                <line x1="75" y1="80" x2="75" y2="85" />
+                                <line x1="32" y1="30" x2="43" y2="30" />
+                                <line x1="32" y1="36" x2="43" y2="36" />
+                                <line x1="32" y1="64" x2="43" y2="64" />
+                                <line x1="32" y1="70" x2="43" y2="70" />
+                                <line x1="34" y1="46" x2="34" y2="54" />
+                                <circle cx="38" cy="50" r="1.5" stroke="none" fill="currentColor" />
+                                <line x1="57" y1="30" x2="68" y2="30" />
+                                <line x1="57" y1="36" x2="68" y2="36" />
+                                <line x1="57" y1="64" x2="68" y2="64" />
+                                <line x1="57" y1="70" x2="68" y2="70" />
+                                <line x1="59" y1="46" x2="59" y2="54" />
+                                <circle cx="63" cy="50" r="1.5" stroke="none" fill="currentColor" />
+                            </svg>
                         </div>
-                        <div>
-                            <h4 class="font-medium text-ananda-dark mb-1">Klidová zóna</h4>
-                            <p class="text-sm text-ananda-dark/60">Pro chvíli ticha před i po lekci</p>
-                        </div>
-                    </div>
-                    <!-- Feature 4 -->
-                    <div
-                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4 xl:mt-6">
-                        <div
-                            class="w-14 h-14 rounded-full bg-ananda-beige/60 flex shrink-0 items-center justify-center text-xl text-ananda-dark">
-                            ✦
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-ananda-dark mb-1">Útulné zázemí</h4>
-                            <p class="text-sm text-ananda-dark/60">Pohodlné zázemí a šatna</p>
+                        <div class="text-center sm:text-left">
+                            <h4 class="text-xl font-medium text-ananda-dark mb-2">Prostorné šatny</h4>
+                            <p class="text-sm text-ananda-dark/70 font-light leading-relaxed">Útulné čisté šatny s
+                                uzamykatelnými skříňkami pro vaše věci. Bezpečný prostor, kde se můžete v klidu
+                                převléknout.</p>
                         </div>
                     </div>
                 </div>
@@ -786,94 +813,6 @@
     </section>
 
 
-
-    <!-- Vybavení studia -->
-    <section class="py-24 bg-ananda-bg px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <span class="text-ananda-accent font-serif italic text-xl mb-3 block">Zázemí pro vaši pohodu</span>
-                <h2 class="text-4xl md:text-5xl font-serif text-ananda-dark mb-6">Vše pro váš komfort</h2>
-                <p class="text-lg text-ananda-dark/60 font-light max-w-2xl mx-auto">
-                    Naše studio je plně vybavené, abyste se mohli soustředit jen na svou praxi. Stačí přijít jen ve
-                    lněném, o zbytek se s radostí postaráme.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Vybavení 1 -->
-                <div
-                    class="bg-white rounded-[2.5rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/50 text-center reveal">
-                    <div
-                        class="w-16 h-16 mx-auto rounded-full bg-ananda-powder/50 flex items-center justify-center mb-6 text-ananda-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8" fill="none"
-                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M 25 68 L 35 80 L 80 75 L 70 63" fill="none" />
-                            <path d="M 25 71 L 35 83 L 80 78" fill="none" />
-                            <path d="M 25 68 L 25 71 M 35 80 L 35 83 M 80 75 L 80 78" fill="none" />
-                            <path d="M 28 30 L 73 25 A 12 20 0 0 1 73 65 L 28 70 Z" fill="white" />
-                            <ellipse cx="28" cy="50" rx="12" ry="20" fill="white" />
-                            <ellipse cx="28" cy="50" rx="7" ry="12" fill="none" />
-                            <ellipse cx="28" cy="50" rx="2.5" ry="4.5" fill="none" />
-                            <path d="M 50 27.5 A 12 20 0 0 1 50 67.5" fill="none" />
-                            <path d="M 60 26.5 A 12 20 0 0 1 60 66.5" fill="none" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-serif text-ananda-dark mb-3">Jógové pomůcky</h3>
-                    <p class="text-ananda-dark/70 font-light leading-relaxed text-sm">
-                        K dispozici jsou kvalitní neklouzavé podložky, bloky, pásky i měkké bolster polštáře pro
-                        maximální podporu a bezpečí při cvičení.
-                    </p>
-                </div>
-
-                <!-- Vybavení 2 -->
-                <div
-                    class="bg-white rounded-[2.5rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/50 text-center reveal reveal-delay-1">
-                    <div
-                        class="w-16 h-16 mx-auto rounded-full bg-ananda-sage/30 flex items-center justify-center mb-6 text-ananda-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8" fill="none"
-                            stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M 50 15 L 50 25" />
-                            <path d="M 35 25 L 65 25 Q 70 25 70 30 L 70 35 L 30 35 L 30 30 Q 30 25 35 25 Z" />
-                            <path d="M 40 45 L 35 55" />
-                            <path d="M 50 45 L 50 55" />
-                            <path d="M 60 45 L 65 55" />
-                            <path d="M 30 65 L 25 75" />
-                            <path d="M 50 65 L 50 75" />
-                            <path d="M 70 65 L 75 75" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-serif text-ananda-dark mb-3">Sprchy a hygiena</h3>
-                    <p class="text-ananda-dark/70 font-light leading-relaxed text-sm">
-                        Před i po dynamičtější lekci si můžete dopřát uvolňující sprchu. K dispozici je také čistá
-                        přírodní kosmetika a fén.
-                    </p>
-                </div>
-
-                <!-- Vybavení 3 -->
-                <div
-                    class="bg-white rounded-[2.5rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/50 text-center reveal reveal-delay-2">
-                    <div
-                        class="w-16 h-16 mx-auto rounded-full bg-ananda-pink/30 flex items-center justify-center mb-6 text-ananda-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8" fill="none"
-                            stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M 40 25 L 40 15 Q 40 10 50 10 Q 60 10 60 15 L 60 25" />
-                            <path
-                                d="M 25 35 Q 25 25 35 25 L 65 25 Q 75 25 75 35 L 80 80 Q 82 90 70 90 L 30 90 Q 18 90 20 80 Z" />
-                            <path d="M 40 25 L 40 35" />
-                            <path d="M 60 25 L 60 35" />
-                            <path d="M 35 50 L 65 50" />
-                            <path d="M 50 50 L 50 65" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-serif text-ananda-dark mb-3">Prostorné šatny</h3>
-                    <p class="text-ananda-dark/70 font-light leading-relaxed text-sm">
-                        Útulné čisté šatny s uzamykatelnými skříňkami pro vaše věci. Bezpečný prostor, kde se můžete v
-                        klidu převléknout.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
 
 
