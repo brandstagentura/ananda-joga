@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="cs" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ananda Jóga — Váš osobní prostor pro jógu</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <!-- Alpine.js pro jednoduché interakce (volitelně, použijeme Vanilla JS pro animace) -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ananda': {
+                            bg: '#FDFBF7',      // Velmi světlá teplá bílá
+                            card: '#FFFFFF',
+                            pink: '#F3E5E3',    // Zesvětlená jemná růžová
+                            powder: '#F5EBE6',  // Pudrová
+                            beige: '#EBE8E3',   // Písková
+                            sage: '#D7E0D3',    // Jemná šalvějová
+                            dark: '#3A4240',    // Měkčí tmavá (namísto tvrdé černé)
+                            accent: '#C7A8A2',  // Akcentní tmavší růžovo-hnědá
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                        sans: ['"Manrope"', 'system-ui', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        '5xl': '3rem',
+                        'blob': '40% 60% 70% 30% / 40% 50% 60% 50%',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(58, 66, 64, 0.05)',
+                        'float': '0 20px 40px -10px rgba(58, 66, 64, 0.08)',
+                        'glow': '0 0 20px rgba(199, 168, 162, 0.4)',
+                    },
+                    transitionTimingFunction: {
+                        'ease-spring': 'cubic-bezier(0.25, 1, 0.5, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: theme('colors.ananda.bg');
+            color: theme('colors.ananda.dark');
+            overflow-x: hidden;
+        }
+
+        /* Vlastní animace - Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 100ms;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 200ms;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 300ms;
+        }
+
+        /* Jemný Parallax efekt pro obrázky */
+        .img-wrapper {
+            overflow: hidden;
+        }
+
+        .img-parallax {
+            transform: scale(1.05);
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .img-wrapper:hover .img-parallax {
+            transform: scale(1);
+        }
+
+        /* Organic blob animation pro hero vizuál */
+        @keyframes morph {
+            0% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+
+            50% {
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+            }
+
+            100% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+        }
+
+        .blob-shape {
+            animation: morph 8s ease-in-out infinite;
+        }
+
+        /* Nová animace pro kalendář */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CTA tlačítko */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: theme('colors.ananda.accent');
+            border-radius: 9999px;
+            z-index: -2;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: theme('colors.ananda.dark');
+            transition: all .4s cubic-bezier(0.25, 1, 0.5, 1);
+            border-radius: 9999px;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+        }
+
+        /* Jemná linka pod nadpisy */
+        .heading-line {
+            display: inline-block;
+            position: relative;
+        }
+
+        .heading-line::after {
+            content: "";
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: theme('colors.ananda.pink');
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        /* Sklo / Glassmorphism navbar */
+        .glass-nav {
+            background: rgba(253, 251, 247, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(253, 251, 247, 0.3);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-ananda-accent selection:text-white relative">
+
+    <!-- Dekorativní gradient na pozadí pŕes celý dokument (velmi měkký) -->
+    <div class="fixed inset-0 pointer-events-none z-[-1] opacity-60" style="background: radial-gradient(circle at 15% 10%, rgba(243, 229, 227, 0.6) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 60%, rgba(215, 224, 211, 0.5) 0%, transparent 40%);">
+    </div>
+
+    <!-- Navigace -->
+    <nav class="absolute top-0 left-0 right-0 z-50 py-4 px-6 md:px-10" id="navbar">
+        <div class="max-w-7xl mx-auto flex items-center justify-between rounded-full px-6 py-3" id="nav-inner">
+            <a href="#" class="text-2xl md:text-3xl font-serif text-ananda-dark flex items-center gap-2 group">
+                <span
+                    class="w-8 h-8 rounded-full bg-ananda-pink flex items-center justify-center text-ananda-accent transition-transform group-hover:scale-110">✦</span>
+                Ananda Jóga
+            </a>
+
+            <div class="flex items-center gap-6">
+                <!-- Desktop Menu -->
+                <div
+                    class="hidden md:flex items-center gap-8 bg-white/30 backdrop-blur-sm px-6 py-2 rounded-full border border-white/20">
+                    <a href="#studio"
+                        class="text-sm font-medium tracking-wide text-ananda-dark/80 hover:text-ananda-accent transition-colors">O
+                        studiu</a>
+                    <a href="#lekce"
+                        class="text-sm font-medium tracking-wide text-ananda-dark/80 hover:text-ananda-accent transition-colors">Lekce</a>
+                    <a href="#rozvrh"
+                        class="text-sm font-medium tracking-wide text-ananda-dark/80 hover:text-ananda-accent transition-colors">Rozvrh</a>
+                    <a href="#kontakt"
+                        class="text-sm font-medium tracking-wide text-ananda-dark/80 hover:text-ananda-accent transition-colors">Kontakt</a>
+                </div>
+
+                <!-- CTA nav -->
+                <div class="hidden md:block">
+                    <a href="#rozvrh"
+                        class="px-6 py-3 rounded-full text-sm font-medium bg-ananda-dark text-white hover:bg-ananda-dark/90 transition shadow-float inline-block">
+                        Rezervovat
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button
+                    class="md:hidden w-10 h-10 rounded-full bg-white shadow-soft flex flex-col justify-center items-center gap-1.5 focus:outline-none">
+                    <span class="w-5 h-0.5 bg-ananda-dark rounded-full"></span>
+                    <span class="w-4 h-0.5 bg-ananda-dark rounded-full mr-1"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section
+        class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 md:px-10 overflow-hidden min-h-[95vh] flex items-center">
+        <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+
+            <!-- Text obsahu -->
+            <div class="lg:col-span-6 2xl:col-span-5 flex flex-col justify-center text-center lg:text-left z-20">
+                <div class="reveal">
+                    <span
+                        class="inline-block py-1.5 px-4 rounded-full bg-white shadow-sm border border-ananda-beige text-xs font-semibold tracking-wider uppercase text-ananda-accent mb-6">
+                        Váš prostor
+                    </span>
+                </div>
+                <h1 class="reveal text-5xl md:text-6xl lg:text-[4.5rem] font-serif leading-[1.1] text-ananda-dark mb-6">
+                    Najděte rovnováhu <br>
+                    <span class="italic font-light text-ananda-accent">těla i mysli</span>
+                </h1>
+                <p
+                    class="reveal reveal-delay-1 text-lg md:text-xl text-ananda-dark/70 font-light mb-4 max-w-lg mx-auto lg:mx-0">
+                    Zpomalte. Nadechněte se. Dopřejte si prostor, kde můžete být plně přítomní.
+                </p>
+                <p
+                    class="reveal reveal-delay-2 text-base md:text-lg text-ananda-dark/60 font-light mb-10 max-w-lg mx-auto lg:mx-0">
+                    V našem studiu jógy vytváříme bezpečné a klidné prostředí pro každého – bez ohledu na zkušenosti.
+                </p>
+                <div
+                    class="reveal reveal-delay-3 flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                    <a href="#rozvrh"
+                        class="btn-primary inline-flex items-center justify-center px-8 py-4 rounded-full text-ananda-dark font-medium shadow-soft w-full sm:w-auto transition-colors">
+                        Rezervovat lekci
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                    <a href="#studio"
+                        class="inline-flex items-center justify-center px-8 py-4 rounded-full text-ananda-dark font-medium hover:text-ananda-accent transition w-full sm:w-auto">
+                        O studiu
+                    </a>
+                </div>
+            </div>
+
+            <!-- Velký organic obrázek -->
+            <div
+                class="lg:col-span-6 2xl:col-span-7 relative h-[60vh] lg:h-[75vh] w-full reveal reveal-delay-2 order-first lg:order-last mb-10 lg:mb-0">
+                <!-- Dekorační barevný tvar na pozadí -->
+                <div
+                    class="absolute inset-0 bg-ananda-pink rounded-[3rem] lg:rounded-[4rem] transform rotate-3 scale-105 opacity-60">
+                </div>
+                <div
+                    class="absolute inset-0 bg-ananda-sage rounded-[3rem] lg:rounded-[4rem] transform -rotate-2 scale-[1.02] opacity-40">
+                </div>
+
+                <div class="absolute inset-0 rounded-[3rem] lg:rounded-[4rem] overflow-hidden shadow-float group">
+                    <img src="assets/hero.png" alt="Lidé cvičící jógu ve světlém studiu"
+                        class="w-full h-full object-cover img-parallax" />
+                    <!-- Jemný tmavý gradient dole pro odělení hloubky -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    </div>
+                </div>
+
+                <!-- Floating badge -->
+                <div class="absolute -bottom-6 -left-6 md:-left-12 bg-white rounded-full p-4 md:p-6 shadow-float flex items-center gap-4 animate-bounce"
+                    style="animation-duration: 4s;">
+                    <div class="w-12 h-12 rounded-full bg-ananda-powder flex items-center justify-center text-2xl">🌱
+                    </div>
+                    <div>
+                        <p class="text-xs text-ananda-dark/60 font-medium tracking-wide uppercase">Otevřeno</p>
+                        <p class="text-sm font-serif font-semibold text-ananda-dark"><a href="#rozvrh">rozpis lekcí</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- O studiu -->
+    <section id="studio" class="py-24 md:py-32 px-6 md:px-10">
+        <div class="max-w-7xl mx-auto">
+
+            <div class="mb-20 text-center max-w-3xl mx-auto reveal">
+                <span class="text-ananda-accent font-serif italic text-xl mb-3 block">Naše filozofie</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-ananda-dark leading-tight"><span
+                        class="heading-line">Prostor, kde se </span> můžete nadechnout</h2>
+            </div>
+
+            <!-- Karta o studiu - asymetrická -->
+            <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch mb-32">
+                <div
+                    class="lg:w-1/2 rounded-[2.5rem] lg:rounded-[4rem] overflow-hidden shadow-soft aspect-[4/5] lg:aspect-auto img-wrapper reveal">
+                    <img src="assets/studio.png"
+                        onerror="this.src='https://images.unsplash.com/photo-1593164842264-854604db2260?w=800&q=85'"
+                        alt="Interiér studia" class="w-full h-full object-cover img-parallax" />
+                </div>
+                <div class="lg:w-1/2 flex flex-col justify-center py-8 reveal reveal-delay-2">
+                    <div
+                        class="bg-white rounded-[3rem] p-10 md:p-14 shadow-soft transform lg:-ml-24 relative z-10 border border-white">
+                        <div
+                            class="w-16 h-16 rounded-full bg-ananda-pink flex items-center justify-center mb-8 text-ananda-accent text-2xl">
+                            ✧</div>
+                        <p class="text-lg md:text-xl text-ananda-dark/80 leading-relaxed mb-6 font-light">
+                            Naše jógové studio v <strong class="font-medium text-ananda-dark">Českých
+                                Budějovicích</strong> vzniklo jako místo klidu uprostřed každodenního ruchu. Věříme, že
+                            jóga není jen pohyb, ale cesta k vnitřní rovnováze, lehkosti a vědomému životu.
+                        </p>
+                        <p class="text-lg text-ananda-dark/70 leading-relaxed font-light">
+                            Lekce vedeme s důrazem na laskavý přístup, respekt k tělu a individuální tempo každého z
+                            vás. Ať už jste začátečník nebo zkušený praktikující, najdete u nás podporu i prostor pro
+                            vlastní rozvoj.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vlastnosti / O prostorách -->
+            <div class="grid xl:grid-cols-12 gap-12 xl:gap-0 items-start">
+                <div class="xl:col-span-5 reveal pr-8">
+                    <h3 class="text-3xl md:text-4xl font-serif text-ananda-dark mb-6">O našich prostorách</h3>
+                    <p class="text-lg text-ananda-dark/70 leading-relaxed font-light mb-8">
+                        Studio je světlé, vzdušné a navržené tak, aby podporovalo klid a soustředění. Velká okna
+                        propouštějí přirozené denní světlo, jemné barvy interiéru vytvářejí harmonickou atmosféru a
+                        přírodní materiály přispívají k pocitu tepla a bezpečí.
+                    </p>
+                    <p class="text-xl font-serif text-ananda-accent italic">
+                        Chceme, aby se u nás každý cítil příjemně, přirozeně a bez tlaku.
+                    </p>
+                </div>
+
+                <div class="xl:col-span-7 grid sm:grid-cols-2 gap-6 reveal reveal-delay-2">
+                    <!-- Feature 1 -->
+                    <div
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-full bg-ananda-powder flex shrink-0 items-center justify-center">
+                            <svg class="w-6 h-6 text-ananda-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-ananda-dark mb-1">Prostorný sál</h4>
+                            <p class="text-sm text-ananda-dark/60">Sál pro skupinové lekce</p>
+                        </div>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-full bg-ananda-sage/40 flex shrink-0 items-center justify-center">
+                            <svg class="w-6 h-6 text-ananda-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-ananda-dark mb-1">Kvalitní vybavení</h4>
+                            <p class="text-sm text-ananda-dark/60">Podložky a cvičební pomůcky</p>
+                        </div>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4 xl:mt-6">
+                        <div
+                            class="w-14 h-14 rounded-full bg-ananda-pink flex shrink-0 items-center justify-center pb-1 text-2xl text-ananda-dark">
+                            ☽
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-ananda-dark mb-1">Klidová zóna</h4>
+                            <p class="text-sm text-ananda-dark/60">Pro chvíli ticha před i po lekci</p>
+                        </div>
+                    </div>
+                    <!-- Feature 4 -->
+                    <div
+                        class="bg-white rounded-[2rem] p-8 shadow-sm hover:shadow-soft transition-shadow border border-ananda-beige/30 flex items-start gap-4 xl:mt-6">
+                        <div
+                            class="w-14 h-14 rounded-full bg-ananda-beige/60 flex shrink-0 items-center justify-center text-xl text-ananda-dark">
+                            ✦
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-ananda-dark mb-1">Útulné zázemí</h4>
+                            <p class="text-sm text-ananda-dark/60">Pohodlné zázemí a šatna</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Lekce -->
+    <section id="lekce" class="py-24 md:py-32 px-6 md:px-10 bg-white relative">
+        <!-- Zjemnění přechodu na pozadí -->
+        <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-ananda-bg to-transparent"></div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16 md:mb-20 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif text-ananda-dark mb-4">Začněte cvičit se mnou</h2>
+                <p class="text-lg text-ananda-dark/60 font-light max-w-xl mx-auto">Vyberte si styl, který vám sedí.
+                    <span class="italic font-serif">Všechny lekce jsou vhodné i pro začátečníky.</span>
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
+                <!-- Karta 1 -->
+                <a href="#rezervace" class="group block reveal">
+                    <div
+                        class="bg-ananda-powder/30 rounded-[2.5rem] p-3 transition-transform duration-500 hover:-translate-y-2 hover:bg-white hover:shadow-float border border-transparent hover:border-ananda-beige/50">
+                        <div class="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative">
+                            <img src="https://images.unsplash.com/photo-1506126613408-04467b95e66e?w=800&q=85"
+                                alt="Hatha jóga"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors">
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 text-center">
+                            <h3 class="text-2xl font-serif text-ananda-dark mb-2">Hatha jóga</h3>
+                            <div
+                                class="inline-flex items-center text-ananda-accent text-sm font-medium tracking-wide uppercase transition-transform group-hover:translate-x-1">
+                                Více <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Karta 2 -->
+                <a href="#rezervace" class="group block reveal reveal-delay-1 md:mt-10">
+                    <div
+                        class="bg-ananda-sage/10 rounded-[2.5rem] p-3 transition-transform duration-500 hover:-translate-y-2 hover:bg-white hover:shadow-float border border-transparent hover:border-ananda-beige/50">
+                        <div class="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative">
+                            <img src="https://images.unsplash.com/photo-1575057182805-2b67303e1f55?w=800&q=85"
+                                alt="Vinyasa flow"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors">
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 text-center">
+                            <h3 class="text-2xl font-serif text-ananda-dark mb-2">Vinyasa flow</h3>
+                            <div
+                                class="inline-flex items-center text-ananda-accent text-sm font-medium tracking-wide uppercase transition-transform group-hover:translate-x-1">
+                                Více <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Karta 3 -->
+                <a href="#rezervace" class="group block reveal reveal-delay-2">
+                    <div
+                        class="bg-ananda-pink/20 rounded-[2.5rem] p-3 transition-transform duration-500 hover:-translate-y-2 hover:bg-white hover:shadow-float border border-transparent hover:border-ananda-beige/50">
+                        <div class="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative">
+                            <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&q=85"
+                                alt="Yin jóga"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors">
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 text-center">
+                            <h3 class="text-2xl font-serif text-ananda-dark mb-2">Yin jóga</h3>
+                            <div
+                                class="inline-flex items-center text-ananda-accent text-sm font-medium tracking-wide uppercase transition-transform group-hover:translate-x-1">
+                                Více <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </a>
+        </div>
+        </div>
+    </section>
+
+    <!-- ROZVRH LEKCÍ (Nový kalendář) -->
+    <section id="rozvrh" class="py-24 md:py-32 px-6 md:px-10 bg-ananda-bg border-t border-ananda-beige/30">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <span class="text-ananda-accent font-serif italic text-xl mb-3 block">Vyberte si svůj čas</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-ananda-dark leading-tight mb-4">Měsíční rozvrh lekcí
+                </h2>
+                <p class="text-lg text-ananda-dark/60 font-light max-w-xl mx-auto">
+                    Najděte si prostor pro sebe. Na lekci je nutné se předem přihlásit.
+                </p>
+            </div>
+
+            <!-- Ovládání týdnů -->
+            <div
+                class="flex items-center justify-between bg-white rounded-full p-2 md:p-3 shadow-sm border border-ananda-beige/50 max-w-2xl mx-auto mb-12 reveal reveal-delay-1">
+                <button id="prev-week"
+                    class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-ananda-powder text-ananda-dark transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+                <div class="text-center px-4">
+                    <span id="current-week-label"
+                        class="font-serif text-xl md:text-2xl text-ananda-dark font-medium block">Tento týden</span>
+                    <span id="current-week-dates"
+                        class="text-xs tracking-wider uppercase text-ananda-dark/50 font-semibold">12. - 18.
+                        Června</span>
+                </div>
+                <button id="next-week"
+                    class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-ananda-powder text-ananda-dark transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Kalendář / mřížka dnů -->
+            <div class="grid lg:grid-cols-5 gap-4 md:gap-6 reveal reveal-delay-2" id="schedule-grid">
+                <!-- Javascript sem naplní sloupečky -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal / Popup okno -->
+    <div id="class-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Pozadí modalu -->
+        <div class="absolute inset-0 bg-ananda-dark/40 backdrop-blur-sm" id="modal-overlay"></div>
+
+        <!-- Obsah modalu -->
+        <div class="relative w-full max-w-lg bg-white rounded-[2.5rem] shadow-float overflow-hidden transform scale-95 transition-transform duration-300"
+            id="modal-content">
+            <div class="bg-ananda-powder/50 p-8 pb-6 text-center border-b border-ananda-beige/30 relative">
+                <button id="modal-close"
+                    class="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center text-ananda-dark hover:bg-ananda-dark hover:text-white transition shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+                <span id="modal-time"
+                    class="inline-block py-1 px-3 rounded-full bg-white/60 text-xs font-semibold tracking-wider uppercase text-ananda-accent mb-4"></span>
+                <h3 id="modal-title" class="text-3xl font-serif text-ananda-dark mb-2"></h3>
+                <p id="modal-instructor" class="text-ananda-dark/60 text-sm font-medium"></p>
+            </div>
+
+            <div class="p-8 text-center flex flex-col items-center">
+                <div class="mb-8 w-full">
+                    <h4 class="text-xs uppercase tracking-wider font-semibold text-ananda-dark/50 mb-2">O lekci</h4>
+                    <p id="modal-desc" class="text-ananda-dark/80 font-light leading-relaxed max-w-md mx-auto"></p>
+                </div>
+
+                <div class="flex items-center justify-between w-full mb-8 pb-8 border-b border-ananda-beige/30">
+                    <div class="text-left">
+                        <h4 class="text-xs uppercase tracking-wider font-semibold text-ananda-dark/50 mb-1">Cena</h4>
+                        <p id="modal-price" class="text-xl font-serif text-ananda-dark"></p>
+                    </div>
+                    <div class="text-right">
+                        <h4 class="text-xs uppercase tracking-wider font-semibold text-ananda-dark/50 mb-1">Obtížnost
+                        </h4>
+                        <p id="modal-level" class="text-sm font-medium text-ananda-dark"></p>
+                    </div>
+                </div>
+
+                <div class="w-full max-w-sm mx-auto">
+                    <div class="mb-4">
+                        <input type="text" placeholder="Jméno a příjmení"
+                            class="w-full px-4 py-3 rounded-full bg-white border border-ananda-beige/50 focus:outline-none focus:border-ananda-accent/50 text-ananda-dark placeholder-ananda-dark/40 shadow-sm transition-colors text-sm text-center">
+                    </div>
+                    <div class="mb-6">
+                        <input type="email" placeholder="E-mailová adresa"
+                            class="w-full px-4 py-3 rounded-full bg-white border border-ananda-beige/50 focus:outline-none focus:border-ananda-accent/50 text-ananda-dark placeholder-ananda-dark/40 shadow-sm transition-colors text-sm text-center">
+                    </div>
+
+                    <button id="modal-confirm"
+                        class="w-full btn-primary py-4 rounded-full text-ananda-dark bg-ananda-pink/30 font-medium shadow-sm border border-ananda-accent/20 text-center flex justify-center items-center">
+                        Potvrdit rezervaci
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- On Demand & Cytat Section -->
+    <section id="on-demand" class="py-24 px-6 md:px-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+
+            <div
+                class="bg-ananda-powder rounded-[3rem] lg:rounded-[4rem] flex flex-col lg:flex-row items-center overflow-hidden mb-32 reveal">
+                <div class="lg:w-1/2 p-10 md:p-16 lg:p-20 order-2 lg:order-1 text-center lg:text-left">
+                    <span
+                        class="inline-block py-1 px-4 text-xs font-semibold tracking-wider uppercase bg-white/50 text-ananda-accent rounded-full mb-6">Online</span>
+                    <h2 class="text-4xl lg:text-5xl font-serif text-ananda-dark mb-6">Lekce na vyžádání</h2>
+                    <p class="text-lg text-ananda-dark/70 font-light mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                        Nemůžete přijít do studia? Nabízíme také online lekce a nahrávky — cvičte v pohodlí domova,
+                        kdykoli vám to vyhovuje.
+                    </p>
+                    <a href="#kontakt"
+                        class="btn-primary inline-flex items-center justify-center px-8 py-4 rounded-full text-ananda-dark bg-white font-medium shadow-sm border border-white">
+                        Prozkoumat on-line
+                    </a>
+                </div>
+                <div class="lg:w-1/2 w-full h-64 lg:h-auto order-1 lg:order-2 img-wrapper self-stretch">
+                    <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1000&q=85"
+                        alt="Online Jóga" class="w-full h-full object-cover img-parallax" />
+                </div>
+            </div>
+
+
+
+        </div>
+    </section>
+
+
+
+    <!-- Testimonial -->
+    <section class="py-24 bg-ananda-bg px-6">
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <div class="text-ananda-sage font-serif text-6xl md:text-8xl leading-none opacity-50 mb-4 inline-block">“
+            </div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-serif text-ananda-dark mb-10 text-balance leading-relaxed">
+                Krásné a inspirativní — teplo od klientů. Lekce v Ananda Józe mi pomohly najít zpět klid a pružnost.
+                Atmosféra je jemná a přijímající. Každému to vřele doporučuji.
+            </h2>
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 rounded-full overflow-hidden shadow-soft mb-4 border-2 border-white">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&q=80"
+                        alt="Marie K." class="w-full h-full object-cover">
+                </div>
+                <span class="font-serif text-lg text-ananda-dark italic">Marie K.</span>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Kontakt a Footer -->
+    <footer id="kontakt" class="bg-ananda-bg pt-24 pb-10 px-6 md:px-10">
+        <div
+            class="max-w-7xl mx-auto border-b border-ananda-beige/50 pb-20 mb-10 flex flex-col md:flex-row justify-between gap-12 lg:gap-24 relative">
+
+            <div class="md:w-1/2 reveal">
+                <a href="#" class="text-3xl lg:text-4xl font-serif text-ananda-dark flex items-center gap-3 mb-8">
+                    <span
+                        class="w-10 h-10 rounded-full bg-ananda-pink flex items-center justify-center text-ananda-accent">✦</span>
+                    Ananda Jóga
+                </a>
+                <p class="text-ananda-dark/60 max-w-xs font-light leading-relaxed mb-6">
+                    Místo pro vaše tělo i mysl. Zastavte se, nadechněte se a najděte svou vnitřní pohodu.
+                </p>
+            </div>
+
+            <div
+                class="md:w-1/2 flex flex-col sm:flex-row justify-between lg:justify-end gap-12 lg:gap-24 reveal reveal-delay-1">
+                <div>
+                    <h4 class="font-semibold text-ananda-dark tracking-wide uppercase text-sm mb-6">Kontakt</h4>
+                    <ul class="space-y-4 font-light text-ananda-dark/80">
+                        <li>Ulice klidu 12, Praha</li>
+                        <li><a href="mailto:info@anandajoga.cz"
+                                class="hover:text-ananda-accent transition">info@anandajoga.cz</a></li>
+                        <li><a href="tel:+420123456789" class="hover:text-ananda-accent transition">+420 123 456 789</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-ananda-dark tracking-wide uppercase text-sm mb-6">Navigace</h4>
+                    <ul class="space-y-4 font-light text-ananda-dark/80">
+                        <li><a href="#studio" class="hover:text-ananda-accent transition">O studiu</a></li>
+                        <li><a href="#lekce" class="hover:text-ananda-accent transition">Naše Lekce</a></li>
+                        <li><a href="#rezervace" class="hover:text-ananda-accent transition">Rozvrh a rezervace</a></li>
+                        <li><a href="#on-demand" class="hover:text-ananda-accent transition">Online Jóga</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div
+            class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm font-light text-ananda-dark/50 reveal">
+            <p>© 2026 Ananda Jóga. Všechna práva vyhrazena.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-ananda-accent transition">Instagram</a>
+                <a href="#" class="hover:text-ananda-accent transition">Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS logika -->
+    <script>
+        // Data pro rozvrh
+        // Data pro rozvrh s pevnými barvami podle názvu lekce
+        const classesData = [
+            { id: 1, time: "07:00 - 08:15", title: "Ranní probuzení Vinyasa", instructor: "vede: Marie K.", level: "Pro všechny", price: "250 Kč", desc: "Zahajte den pomalým protažením, které postupně přejde v dynamickou Vinyasu. Lekce probudí tělo, rozproudí energii a příjemně naladí mysl na celý den.", bgInfo: "bg-ananda-pink/30 hover:bg-ananda-pink/50 border border-ananda-pink/50" }, // Růžová
+            { id: 2, time: "10:00 - 11:30", title: "Hatha Jóga", instructor: "vede: Jana V.", level: "Začátečníci", price: "220 Kč", desc: "Klidnější lekce se zaměřením na správné provedení asán a vědomý dech. Výborné pro začátečníky nebo jako zklidnění po náročném dni.", bgInfo: "bg-white border border-ananda-beige hover:border-ananda-accent/50 hover:shadow-soft" }, // Bílá
+            { id: 3, time: "16:30 - 17:45", title: "Jemná a Yin Jóga", instructor: "vede: Eva P.", level: "Pro všechny", price: "240 Kč", desc: "Velmi pomalá a relaxační lekce, kdy v pozicích setrváváme delší dobu. Zaměřuje se na uvolnění hlubokých fascií, snížení stresu a pěstování klidu.", bgInfo: "bg-ananda-powder/50 hover:bg-ananda-powder border border-ananda-powder/80" }, // Pudrová
+            { id: 4, time: "18:00 - 19:15", title: "Večerní relaxace", instructor: "vede: Marie K.", level: "Pro všechny", price: "250 Kč", desc: "Lekce zaměřená na uvolnění napětí nasbíraného přes den. Jemné protažení následované delší vedenou závěrečnou relaxací (savasanou).", bgInfo: "bg-ananda-sage/30 hover:bg-ananda-sage/50 border border-ananda-sage/50" }, // Šalvějová
+            // Mírné variace pro render dalších dnů
+            { id: 5, time: "08:00 - 09:15", title: "Astanga Vinyasa", instructor: "vede: Klára J.", level: "Pokročilí", price: "280 Kč", desc: "Dynamická a fyzicky náročnější lekce podle tradiční první série. Klademe důraz na dech Ujjayi a bandhy.", bgInfo: "bg-white border border-ananda-beige hover:border-ananda-accent/50 hover:shadow-soft" }, // Bílá
+            { id: 6, time: "17:00 - 18:15", title: "Zdravá záda", instructor: "vede: Jana V.", level: "Začátečníci", price: "220 Kč", desc: "Terapeuticky zaměřená lekce, která pomáhá s bolestmi zad, krční páteře a špatným držením těla. Vhodné i pro seniory.", bgInfo: "bg-ananda-powder/50 hover:bg-ananda-powder border border-ananda-powder/80" } // Pudrová
+        ];
+
+        // Generování reálných dat uspořádání týdne (5 pracovních dnů) pro aktuální nebo posunutý týden
+        function getWeeklySchedule(weekOffset) {
+            const today = new Date();
+            // Najdeme pondělí daného týdne
+            const dayOfWeek = today.getDay(); // 0 (Sun) to 6 (Sat)
+            const diffToMonday = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+            const mondayDate = new Date(today.setDate(diffToMonday));
+
+            // Přidáme posun týdnů
+            mondayDate.setDate(mondayDate.getDate() + (weekOffset * 7));
+
+            const daysNames = ["Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek"];
+            const classesForDays = [
+                [classesData[0], classesData[1], classesData[2], classesData[3]], // Pondělí
+                [classesData[4], classesData[1], classesData[5], classesData[3]], // Úterý
+                [classesData[0], classesData[5], classesData[2], classesData[3]], // Středa
+                [classesData[4], classesData[1], classesData[2], classesData[5]], // Čtvrtek
+                [classesData[0], classesData[4], classesData[5], classesData[3]]  // Pátek
+            ];
+
+            const schedule = [];
+            for (let i = 0; i < 5; i++) {
+                const currentDateForDay = new Date(mondayDate);
+                currentDateForDay.setDate(mondayDate.getDate() + i);
+                const dateStr = `${currentDateForDay.getDate()}.${currentDateForDay.getMonth() + 1}.`;
+                schedule.push({ day: daysNames[i], date: dateStr, classes: classesForDays[i] });
+            }
+
+            return schedule;
+        }
+
+        // Aktuální datum pro zobrazení rozpětí týdne nahoře
+        function getWeekDateRangeString(weekOffset) {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const diffToMonday = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+            const mondayDate = new Date(today.setDate(diffToMonday));
+            mondayDate.setDate(mondayDate.getDate() + (weekOffset * 7));
+
+            const sundayDate = new Date(mondayDate);
+            sundayDate.setDate(mondayDate.getDate() + 6);
+
+            const months = ["Ledna", "Února", "Března", "Dubna", "Května", "Června", "Července", "Srpna", "Září", "Října", "Listopadu", "Prosince"];
+
+            if (mondayDate.getMonth() === sundayDate.getMonth()) {
+                return `${mondayDate.getDate()}. - ${sundayDate.getDate()}. ${months[mondayDate.getMonth()]}`;
+            } else {
+                return `${mondayDate.getDate()}. ${months[mondayDate.getMonth()]} - ${sundayDate.getDate()}. ${months[sundayDate.getMonth()]}`;
+            }
+        }
+
+        let currentWeekOffset = 0; // 0 = tento týden, 1 = příští, atd.
+
+        // Funkce pro vykreslení kalendáře
+        function renderSchedule() {
+            const grid = document.getElementById('schedule-grid');
+            const weekLabel = document.getElementById('current-week-label');
+
+            grid.innerHTML = ''; // Vyprázdnit mřížku před renderováním
+
+            // Textová reprezentace týdne (pro tento prototyp)
+            document.getElementById('current-week-dates').innerText = getWeekDateRangeString(currentWeekOffset);
+
+            const weeklyScheduleThisWeek = getWeeklySchedule(currentWeekOffset);
+            if (currentWeekOffset === 0) weekLabel.innerText = "Tento týden";
+            else if (currentWeekOffset === 1) weekLabel.innerText = "Příští týden";
+            else if (currentWeekOffset === -1) weekLabel.innerText = "Minulý týden";
+            else weekLabel.innerText = currentWeekOffset > 0 ? `Za ${currentWeekOffset} týdny` : `Před ${Math.abs(currentWeekOffset)} týdny`;
+
+            weeklyScheduleThisWeek.forEach((dayObj, i) => {
+                // Vytvoříme sloupec dne
+                const col = document.createElement('div');
+                col.className = 'flex flex-col gap-4';
+
+                // Hlavička dne
+                const header = document.createElement('div');
+                header.className = 'text-center mb-2';
+                header.innerHTML = `<h3 class="font-serif text-2xl text-ananda-dark mb-1">${dayObj.day}</h3>
+                                    <span class="text-xs text-ananda-dark/50 uppercase tracking-widest">${dayObj.date}</span>`;
+                col.appendChild(header);
+
+                // Lekce ve dni
+                dayObj.classes.forEach((cls, j) => {
+                    const pill = document.createElement('button');
+                    pill.className = `w-full text-left p-5 rounded-[1.5rem] transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-soft ${cls.bgInfo}`;
+
+                    // Efekt "rozhození" animace při změně týdne
+                    pill.style.animation = `fadeSlideIn 0.4s ease forwards ${i * 0.05 + j * 0.05}s`;
+                    pill.style.opacity = '0';
+
+                    pill.innerHTML = `
+                        <div class="text-xs font-semibold tracking-wider text-ananda-dark/60 mb-2">${cls.time}</div>
+                        <h4 class="font-serif text-lg text-ananda-dark mb-1 leading-snug">${cls.title}</h4>
+                        <div class="text-sm text-ananda-dark/50 font-light flex justify-between items-center mt-3">
+                            <span>${cls.instructor}</span>
+                            <span class="w-6 h-6 rounded-full bg-white/60 flex items-center justify-center text-ananda-dark/40 shadow-sm">+</span>
+                        </div>
+                    `;
+
+                    pill.onclick = () => openModal(cls);
+                    col.appendChild(pill);
+                });
+
+                grid.appendChild(col);
+            });
+        }
+
+        // Modal Logika
+        const modal = document.getElementById('class-modal');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalClose = document.getElementById('modal-close');
+        const modalConfirm = document.getElementById('modal-confirm');
+
+        function openModal(cls) {
+            document.getElementById('modal-time').innerText = cls.time;
+            document.getElementById('modal-title').innerText = cls.title;
+            document.getElementById('modal-instructor').innerText = cls.instructor;
+            document.getElementById('modal-desc').innerText = cls.desc;
+            document.getElementById('modal-price').innerText = cls.price;
+            document.getElementById('modal-level').innerText = cls.level;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Malý delay pro spuštění transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Event listenery pro modal
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', closeModal);
+        modalConfirm.addEventListener('click', () => {
+            modalConfirm.innerText = "Rezervováno ✓";
+            modalConfirm.classList.add('bg-ananda-sage', 'text-white');
+            setTimeout(() => {
+                closeModal();
+                setTimeout(() => {
+                    modalConfirm.innerText = "Potvrdit rezervaci";
+                    modalConfirm.classList.remove('bg-ananda-sage', 'text-white');
+                }, 300);
+            }, 1000);
+        });
+
+        // Event listenery pro změnu týdne
+        document.getElementById('prev-week').addEventListener('click', () => {
+            currentWeekOffset--;
+            renderSchedule();
+        });
+        document.getElementById('next-week').addEventListener('click', () => {
+            currentWeekOffset++;
+            renderSchedule();
+        });
+
+        // Intersection Observer pro plynulé skrolování (Reveal animace)
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // Prvotní render rozvrhu
+            renderSchedule();
+
+            const reveals = document.querySelectorAll(".reveal");
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                        // Zastavit pozorování jakmile proběhne animace (volitelné pro výkon, nebo nechat pro re-animaci)
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.1, // aktivuje se, jakmile 10% prvku je vidět
+                rootMargin: "0px 0px -50px 0px" // spustí o něco dříve než dojde na spodní hranu
+            });
+
+            reveals.forEach((reveal) => {
+                revealObserver.observe(reveal);
+            });
+        });
+    </script>
+</body>
+
+</html>
